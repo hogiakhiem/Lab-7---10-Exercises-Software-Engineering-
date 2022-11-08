@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Lab7to10Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Agent">
+    <Key>
+      <PropertyRef Name="AgentID" />
+    </Key>
+    <Property Name="AgentID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="AgentName" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <Property Name="Add_ress" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__AgentID__286302EC" FromRole="Agents" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="ItemID" />
+    </Key>
+    <Property Name="ItemID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <Property Name="Size" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__ItemI__30F848ED" FromRole="Items" ToRole="OrderDetails" />
+  </EntityType>
+  <EntityType Name="OrderDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="ItemID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="UnitAmount" Type="Int32" />
+    <NavigationProperty Name="Item" Relationship="Self.FK__OrderDeta__ItemI__30F848ED" FromRole="OrderDetails" ToRole="Items" />
+    <NavigationProperty Name="Order" Relationship="Self.FK__OrderDeta__UnitA__300424B4" FromRole="OrderDetails" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="OrderDate" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+    <Property Name="AgentID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="Agent" Relationship="Self.FK__Orders__AgentID__286302EC" FromRole="Orders" ToRole="Agents" />
+    <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__UnitA__300424B4" FromRole="Orders" ToRole="OrderDetails" />
+  </EntityType>
+  <Association Name="FK__Orders__AgentID__286302EC">
+    <End Role="Agents" Type="Self.Agent" Multiplicity="0..1" />
+    <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agents">
+        <PropertyRef Name="AgentID" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="AgentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__ItemI__30F848ED">
+    <End Role="Items" Type="Self.Item" Multiplicity="0..1" />
+    <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Items">
+        <PropertyRef Name="ItemID" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="ItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__UnitA__300424B4">
+    <End Role="Orders" Type="Self.Order" Multiplicity="0..1" />
+    <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Lab7to10Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Agents" EntityType="Self.Agent" />
+    <EntitySet Name="Items" EntityType="Self.Item" />
+    <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <AssociationSet Name="FK__Orders__AgentID__286302EC" Association="Self.FK__Orders__AgentID__286302EC">
+      <End Role="Agents" EntitySet="Agents" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__ItemI__30F848ED" Association="Self.FK__OrderDeta__ItemI__30F848ED">
+      <End Role="Items" EntitySet="Items" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__UnitA__300424B4" Association="Self.FK__OrderDeta__UnitA__300424B4">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
